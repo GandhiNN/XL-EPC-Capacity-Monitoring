@@ -10,7 +10,7 @@ import (
 	"path/filepath"
 	"time"
 
-	ppmapi "github.com/gandhi/ppmapi/api"
+	ppmapi "github.com/GandhiNN/ppmapi/api"
 )
 
 func main() {
