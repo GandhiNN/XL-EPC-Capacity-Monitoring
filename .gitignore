@@ -1,0 +1,14 @@
+# Ignore all go binaries
+bin/
+
+# Ignore script draft folder
+draft/
+
+# Ignore processed folder
+processed/
+
+# Ignore sgsn folder
+sgsn/
+
+# Ignore ggsn folder
+ggsn/
