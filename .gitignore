@@ -1,5 +1,6 @@
 # Ignore all go binaries
 bin/
+main
 
 # Ignore script draft folder
 draft/
