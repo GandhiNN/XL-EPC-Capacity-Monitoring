@@ -179,6 +179,6 @@ def SetLogging():
 # and converts to JSON format to be used by WriteNodeCPU
 def NodeCardMapper(cwd, csvfile):
     # set the binary we want to execute
-    binary = cwd + "/node-cpu-mapper"
+    binary = cwd + "/bin/node-cpu-mapper"
     logging.info("executing node cpu mapper...")
     subprocess.call([binary, csvfile])
