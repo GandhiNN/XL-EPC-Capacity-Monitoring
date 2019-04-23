@@ -99,6 +99,11 @@ def WriteNodeCPU(resource_list_name, output_filename, node_json):
             logging.info("dropping the following card with id: %s", str(card_id_non_sf_active).strip('[]'))
             # Drop the columns with card id = card_id_non_sf_active
             df_clean = df.drop(card_id_non_sf_active, axis=1)
+            # Restack the dataframe (stack() returns a Series),
+            # Reconvert to Dataframe, and rename the columns
+            logging.info("reshaping the data to proper tabular format...")
+            df_clean = df_clean.stack().to_frame().reset_index()
+            df_clean.columns = ['Timestamp','Card ID','CPU Load Busy Percentage Last 5 Minutes Average']
             # Log for cleaned data : end result
             logging.info("writing dataframe to excel sheet, sheet name='%s'", d['NodeName'])
             df_clean.to_excel(writer, sheet_name=d['NodeName'], index=False)
