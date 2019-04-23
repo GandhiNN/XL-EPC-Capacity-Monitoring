@@ -13,6 +13,7 @@ start=$(date +%s)
 # Get time variable
 year=$(date +%Y)
 last_month=$(date -d "last month" '+%m')
+today=$(date +%Y%m%d)
 
 # Set global vars : START, END flags, Core binary, Working Directory of the Core binary
 START=""
@@ -153,9 +154,35 @@ printf "Running GGSN data gatherer...start date: %s, end date: %s \n" ${START} $
 # Call the data neater scripts
 echo "Running data neater script..." ; $DATA_NEATER
 
-# Moving the processed file into destination directory
+## Final cleanups
+# 1. Moving the processed file into destination directory
 echo "moving post-processed XLS file into cold storage directory"
 mv ${POST_PROC_DIR}/*xls ${DEST_DIR}
+
+# 2. Moving the raw file into separate directory
+# a. SGSN
+cold_csv_dir_sgsn=${WORKDIR}/sgsn/${today}
+
+# Check if destination directory exist
+if [ ! -d ${cold_csv_dir_sgsn} ]; then
+    mkdir -pv ${cold_csv_dir_sgsn}
+else
+    echo "Destination directory exists at ${cold_csv_dir_sgsn}"
+fi
+echo "moving SGSN raw files into cold storage directory"
+mv ${WORKDIR}/sgsn/*.csv ${cold_csv_dir_sgsn}
+
+# b. GGSN
+cold_csv_dir_ggsn=${WORKDIR}/ggsn/${today}
+
+# Check if destination directory exist
+if [ ! -d ${cold_csv_dir_ggsn} ]; then
+    mkdir -pv ${cold_csv_dir_ggsn}
+else
+    echo "Destination directory exists at ${cold_csv_dir_ggsn}"
+fi
+echo "moving GGSN raw files into cold storage directory"
+mv ${WORKDIR}/ggsn/*.csv ${cold_csv_dir_ggsn}
 
 # Flag off
 echo "Done!"
