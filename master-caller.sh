@@ -19,6 +19,7 @@ START=""
 END=""
 SCRIPT=/home/psi/go/CapMon/main
 WORKDIR=/home/psi/go/CapMon
+CONFDIR=/home/psi/go/configs
 
 # Set global vars : Post-processing script, directory ; Destination directory
 DATA_NEATER=/home/psi/go/CapMon/data_neater.py
@@ -38,7 +39,7 @@ function call_sgsn() {
 
     # Begin main function
     echo "Executing for SGSN"
-    for i in $(cat ${WORKDIR}/sgsn.txt); do
+    for i in $(cat ${CONFDIR}/sgsn.txt); do
         IP=${i%,*};
         NAME=${i#*,};
         $SCRIPT --start=${START} --end=${END} --node=${IP} --nodename=${NAME} --resource="CPU_Load"
@@ -63,7 +64,7 @@ function call_ggsn() {
 
     # Begin main function
     echo "Executing for GGSN"
-    for i in $(cat ${WORKDIR}/ggsn.txt); do
+    for i in $(cat ${CONFDIR}/ggsn.txt); do
         IP=${i%,*};
         NAME=${i#*,};
         $SCRIPT --start=${START} --end=${END} --node=${IP} --nodename=${NAME} --resource="GGSN_IP_Pool"
