@@ -39,7 +39,7 @@ function call_sgsn() {
 
     # Begin main function
     echo "Executing for SGSN"
-    for i in $(cat ${CONFDIR}/sgsn.txt); do
+    for i in $(cat ${CONFDIR}/nodelist/sgsn.txt); do
         IP=${i%,*};
         NAME=${i#*,};
         $SCRIPT --start=${START} --end=${END} --node=${IP} --nodename=${NAME} --resource="CPU_Load"
@@ -64,7 +64,7 @@ function call_ggsn() {
 
     # Begin main function
     echo "Executing for GGSN"
-    for i in $(cat ${CONFDIR}/ggsn.txt); do
+    for i in $(cat ${CONFDIR}/nodelist/ggsn.txt); do
         IP=${i%,*};
         NAME=${i#*,};
         $SCRIPT --start=${START} --end=${END} --node=${IP} --nodename=${NAME} --resource="GGSN_IP_Pool"
