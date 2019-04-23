@@ -17,7 +17,7 @@ last_month=$(date -d "last month" '+%m')
 # Set global vars : START, END flags, Core binary, Working Directory of the Core binary
 START=""
 END=""
-SCRIPT=/home/psi/go/CapMon/CapMon
+SCRIPT=/home/psi/go/CapMon/main
 WORKDIR=/home/psi/go/CapMon
 
 # Set global vars : Post-processing script, directory ; Destination directory
