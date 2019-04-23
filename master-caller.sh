@@ -22,7 +22,7 @@ WORKDIR=/home/psi/go/CapMon
 CONFDIR=/home/psi/go/CapMon/configs
 
 # Set global vars : Post-processing script, directory ; Destination directory
-DATA_NEATER=/home/psi/go/CapMon/data_neater.py
+DATA_NEATER=/home/psi/go/CapMon/main.py
 POST_PROC_DIR=/home/psi/go/CapMon/processed
 DEST_DIR=${POST_PROC_DIR}/${year}/${last_month}/
 
