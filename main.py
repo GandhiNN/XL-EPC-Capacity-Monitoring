@@ -77,8 +77,8 @@ def main():
     NodeCardMapper(cwd, sgsnmme_csv)
 
     # Set the name of the Node CPU JSON mapping
-    saegw_json = cwd + "/saegw-card-role.json"
-    sgsnmme_json = cwd + "/sgsnmme-card-role.json"
+    saegw_json = cwd + "/configs/cards/saegw-card-role.json"
+    sgsnmme_json = cwd + "/configs/cards/sgsnmme-card-role.json"
 
     # Loop through the dictionaries
     # SAEGW
