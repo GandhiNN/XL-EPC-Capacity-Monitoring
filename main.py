@@ -66,8 +66,8 @@ def main():
     SGSN_TOTAL_SAU_XLS = cwd + "/processed/SGSN 2G 3G 4G SAU.xls"
 
     # Set variable for Node CPU CSV mapping
-    saegw_csv = cwd + "/saegw-card-role.csv"
-    sgsnmme_csv = cwd + "/sgsnmme-card-role.csv"
+    saegw_csv = cwd + "/configs/cards/saegw-card-role.csv"
+    sgsnmme_csv = cwd + "/configs/cards/sgsnmme-card-role.csv"
 
     # Get the dictionaries of filename vs raw data
     output_filename_ggsn, output_filename_sgsn = CreateDictOfFilenames(cwd, today)
