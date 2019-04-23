@@ -13,3 +13,6 @@ sgsn/
 
 # Ignore ggsn folder
 ggsn/
+
+# Ignore sample data folder
+sample/
