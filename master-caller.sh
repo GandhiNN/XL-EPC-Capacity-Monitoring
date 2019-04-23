@@ -19,7 +19,7 @@ START=""
 END=""
 SCRIPT=/home/psi/go/CapMon/main
 WORKDIR=/home/psi/go/CapMon
-CONFDIR=/home/psi/go/configs
+CONFDIR=/home/psi/go/CapMon/configs
 
 # Set global vars : Post-processing script, directory ; Destination directory
 DATA_NEATER=/home/psi/go/CapMon/data_neater.py
