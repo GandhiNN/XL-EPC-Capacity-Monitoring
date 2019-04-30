@@ -121,8 +121,10 @@ current_month=$(date +%m)
 
 # start_month : two months back from 15th day of running month
 # end_month : one month back from 15th day of running month
-start_month=$(date --date="$(date +%Y-%m-15) -2 month" +%m)
-end_month=$(date --date="$(date +%Y-%m-15) -1 month" +%m)
+#start_month=$(date --date="$(date +%Y-%m-15) -2 month" +%m)
+start_month=$(date --date="$(date +%Y-%m-15) -1 month" +%m)
+#end_month=$(date --date="$(date +%Y-%m-15) -1 month" +%m)
+end_month=$(date --date="$(date +%Y-%m-15)" +%m)
 start_month_string=$(date --date="$(date +%Y-%m-15) -2 month" +%b)
 end_month_string=$(date --date="$(date +%Y-%m-15) -1 month" +%b)
 start_year=""
