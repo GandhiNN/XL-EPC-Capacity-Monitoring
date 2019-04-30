@@ -143,8 +143,13 @@ def LoadDf2g3gSAU(resource_list_name, node_list, output_filename):
         # check for null values
         df = IsNull(df)
         df = df[cols]
+        # rename column name
         df.rename(columns={'XL Overall SGSN 2G and 3G Attached Subscribers':'Attached Users'},inplace=True)
+        # Convert 'Attach Users' to float
+        df['Attached Users'] = df['Attached users'].str.replace(',','').astype(float)
+        # Exclude rows with "map-svc"
         df = df[df['Service Name'] != "map-svc"]
+        # Load to dict
         df_dict_2g_3g_sau[node] = df
     return df_dict_2g_3g_sau
 
@@ -160,6 +165,9 @@ def LoadDF4GSau(resource_list_name, node_list, output_filename):
         # check for null values
         df = IsNull(df)
         df = df[cols]
+        # Convert 'Attached Users' to float
+        df['Attached Users'] = df['Attached users'].str.replace(',','').astype(float)
+        # Load to dict
         df_dict_4g_sau[node] = df
     return df_dict_4g_sau
 
