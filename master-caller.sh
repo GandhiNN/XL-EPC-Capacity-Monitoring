@@ -119,15 +119,11 @@ calendar["Dec"]=31
 # Check for current month
 current_month=$(date +%m)
 
-# start_month : two months back from actual date
-# end_month : one month back from actual date
-#start_month=$(date -d "2 months ago" +%m)
+# start_month : two months back from 15th day of running month
+# end_month : one month back from 15th day of running month
 start_month=$(date --date="$(date +%Y-%m-15) -2 month" +%m)
-#end_month=$(date -d "1 month ago" +%m)
 end_month=$(date --date="$(date +%Y-%m-15) -1 month" +%m)
-#start_month_string=$(date -d "2 months ago" +%b)
 start_month_string=$(date --date="$(date +%Y-%m-15) -2 month" +%b)
-#end_month_string=$(date -d "1 month ago" +%b)
 end_month_string=$(date --date="$(date +%Y-%m-15) -1 month" +%b)
 start_year=""
 end_year=""
