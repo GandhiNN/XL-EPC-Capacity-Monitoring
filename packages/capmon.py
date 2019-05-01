@@ -146,7 +146,7 @@ def LoadDf2g3gSAU(resource_list_name, node_list, output_filename):
         # rename column name
         df.rename(columns={'XL Overall SGSN 2G and 3G Attached Subscribers':'Attached Users'},inplace=True)
         # Convert 'Attach Users' to float
-        df['Attached Users'] = df['Attached users'].str.replace(',','').astype(float)
+        df['Attached Users'] = df['Attached Users'].str.replace(',','').astype(float)
         # Exclude rows with "map-svc"
         df = df[df['Service Name'] != "map-svc"]
         # Load to dict
