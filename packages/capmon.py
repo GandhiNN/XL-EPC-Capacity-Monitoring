@@ -166,7 +166,7 @@ def LoadDF4GSau(resource_list_name, node_list, output_filename):
         df = IsNull(df)
         df = df[cols]
         # Convert 'Attached Users' to float
-        df['Attached Users'] = df['Attached users'].str.replace(',','').astype(float)
+        df['Attached Users'] = df['Attached Users'].str.replace(',','').astype(float)
         # Load to dict
         df_dict_4g_sau[node] = df
     return df_dict_4g_sau
