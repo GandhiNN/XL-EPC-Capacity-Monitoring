@@ -19,13 +19,15 @@ func main() {
 	//timenow := time.Now()
 
 	// Create a HTTP Transport Object
-	// Handle insecure key/x509 cert error
 	// and then create a *http.Client object afterward
 	tr := &http.Transport{
 		MaxIdleConns:       30,
 		IdleConnTimeout:    30 * time.Second,
 		DisableCompression: true,
-		TLSClientConfig:    &tls.Config{InsecureSkipVerify: true},
+		// Handle insecure key/x509 cert error and,
+		// resolve the "connection reset by peer" by capping TLS at version 1.1 and retrying
+		// SEE: http://www.debug.is/2017/11/01/http-tls-handling-go-http-client/
+		TLSClientConfig: &tls.Config{InsecureSkipVerify: true, MaxVersion: tls.VersionTLS11},
 	}
 	client := &http.Client{Transport: tr}
 
@@ -59,7 +61,23 @@ func main() {
 		if err != nil {
 			log.Fatal("error reading config file: ", err)
 		}
-		respBody, err := api.GetCSV(url)
+		var (
+			respBody []byte
+			retries  = 3
+		)
+		for retries > 0 {
+			respBody, err = api.GetCSV(url)
+			if err != nil {
+				log.Fatal(err)
+				log.Print("connection reset by peer, retrying...")
+				retries--
+			} else {
+				break
+			}
+		}
+		/*
+			respBody, err := api.GetCSV(url)
+		*/
 		ppmapi.WriteCSV(outputfile, respBody)
 	}
 	resource := FileNameGenerator(resourceName, api)
