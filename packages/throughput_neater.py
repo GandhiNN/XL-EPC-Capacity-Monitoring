@@ -207,9 +207,11 @@ def CleanThroughputData(file_excel):
 # ConstructThroughputTable is a function which accepts a dictionary of cleaned dataframe
 # and a dictionary of nodes:upper_limit_capacity. It uses both arguments and will return
 # a dataframe of summarized throughput utilization
-def ConstructThroughputTable(df_dict, node_tput_cap_dict):
+def ConstructThroughputTable(df_dict, node_tput_cap_csv):
     throughput_table = pd.DataFrame(index=sorted(list(df_dict.keys())),
         columns = ['Peak (Mbps)', 'Average (Mbps)', 'Busiest Day'])
+    # Load csv of node upper-limit capacity to dictionary
+    node_tput_cap_dict = {row[0]:row[1] for _, row in pd.read_csv(node_tput_cap_csv).iterrows()}
     tput_cap_table = pd.DataFrame(node_tput_cap_dict.items(), columns=['Device', 'Capacity (Mbps)'])
     tput_cap_table.set_index('Device', drop=True, inplace=True)
     throughput_table.index.name = 'Device'
@@ -238,6 +240,7 @@ def ConstructThroughputTable(df_dict, node_tput_cap_dict):
     return df
 
 # Define a map of committed throughput capacity for each GGSN
+"""
 tputcap = {'GGBNB01':66000,
            'GGBNB02':66000,
            'GGCBT11':94000,
@@ -250,3 +253,4 @@ tputcap = {'GGBNB01':66000,
            'GGCBT18':94000,
            'GGCBT05':10000,
 }
+"""
