@@ -127,17 +127,18 @@ def RemoveOutliers(df):
 
 # Create a fuction to visualize the graph with IQD parameters
 def VisualizeIQDTransformation(df, min_log, max_log, column_name='Log_Throughput'):
-    # Visualize
+    # Set the plot canvass for the first graph
     plt.figure(figsize=(10,8))
     plt.subplot(211)
     plt.xlim(df[column_name].min(), df[column_name].max()*1.1)
     plt.axvline(x=min_log)
     plt.axvline(x=max_log)
-
+    # Plot the data
     ax = df[column_name].plot(kind='kde')
-
+    # Set the plot canvass for the second graph
     plt.subplot(212)
     plt.xlim(df[column_name].min(), df[column_name].max()*1.1)
+    # Plot the boxplot
     sns.boxplot(x=df[column_name])
     plt.axvline(x=min_log)
     plt.axvline(x=max_log)
