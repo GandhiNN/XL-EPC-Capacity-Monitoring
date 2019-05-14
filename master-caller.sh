@@ -20,13 +20,6 @@ DATA_NEATER=${HOME}/epc-capacity-monitoring/main.py
 POST_PROC_DIR=${HOME}/epc-capacity-monitoring/processed
 DEST_DIR=${POST_PROC_DIR}/${year}/${last_month}
 
-# Check if destination directory exist
-#if [ ! -d ${DEST_DIR} ]; then
-#    mkdir -pv ${DEST_DIR}
-#else
-#    echo "Destination directory exists at ${DEST_DIR}"
-#fi
-
 function call_sgsn() {
     # Script start timing
     start=$(date +%s)
