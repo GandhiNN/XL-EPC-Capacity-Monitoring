@@ -21,11 +21,11 @@ POST_PROC_DIR=${HOME}/epc-capacity-monitoring/processed
 DEST_DIR=${POST_PROC_DIR}/${year}/${last_month}
 
 # Check if destination directory exist
-if [ ! -d ${DEST_DIR} ]; then
-    mkdir -pv ${DEST_DIR}
-else
-    echo "Destination directory exists at ${DEST_DIR}"
-fi
+#if [ ! -d ${DEST_DIR} ]; then
+#    mkdir -pv ${DEST_DIR}
+#else
+#    echo "Destination directory exists at ${DEST_DIR}"
+#fi
 
 function call_sgsn() {
     # Script start timing
@@ -158,6 +158,13 @@ cat << EOF
     All rights reserved
 
 EOF
+
+# Check if destination directory exist
+if [ ! -d ${DEST_DIR} ]; then
+    mkdir -pv ${DEST_DIR}
+else
+    echo "Destination directory exists at ${DEST_DIR}"
+fi
 
 # Call the csv gatherer scripts
 printf "Running SGSN data gatherer...start date: %s, end date: %s \n" ${START} ${END} ; call_sgsn
