@@ -7,6 +7,9 @@
 #    exit 1
 #fi
 
+# Load shell env
+source .
+
 # Script Start Timing
 start=$(date +%s)
 
@@ -18,14 +21,20 @@ today=$(date +%Y%m%d)
 # Set global vars : START, END flags, Core binary, Working Directory of the Core binary
 START=""
 END=""
-SCRIPT=/home/psi/go/CapMon/main
-WORKDIR=/home/psi/go/CapMon
-CONFDIR=/home/psi/go/CapMon/configs
+#SCRIPT=/home/psi/go/CapMon/main
+SCRIPT=${HOME}/epc-capacity-monitoring/main
+#WORKDIR=/home/psi/go/CapMon
+WORKDIR=${HOME}/epc-capacity-monitoring
+#CONFDIR=/home/psi/go/CapMon/configs
+CONFDIR=${HOME}/epc-capacity-monitoring/configs
 
 # Set global vars : Post-processing script, directory ; Destination directory
-DATA_NEATER=/home/psi/go/CapMon/main.py
-POST_PROC_DIR=/home/psi/go/CapMon/processed
-DEST_DIR=${POST_PROC_DIR}/${year}/${last_month}/
+#DATA_NEATER=/home/psi/go/CapMon/main.py
+DATA_NEATER=${HOME}/epc-capacity-monitoring/main.py
+#POST_PROC_DIR=/home/psi/go/CapMon/processed
+POST_PROC_DIR=${HOME}/epc-capacity-monitoring/processed
+#DEST_DIR=${POST_PROC_DIR}/${year}/${last_month}/
+DEST_DIR=${POST_PROC_DIR}/${year}/${last_month}
 
 # Check if destination directory exist
 if [ ! -d ${DEST_DIR} ]; then
