@@ -8,7 +8,7 @@
 #fi
 
 # Load shell env
-source .
+#source .
 
 # Script Start Timing
 start=$(date +%s)
