@@ -148,12 +148,13 @@ END=${end_year}-${end_month}-${end_month_last_date}
 
 # Print fancy banner
 cat << EOF
-    @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-    @ EPC Capacity Monitoring Collector Scripts @
-    @    Copyright  : Ngakan Nyoman Gandhi      @
-    @    Start Date : ${START}                  @
-    @    END DATE   : ${END}                    @
-    @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+    @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+    @      EPC Capacity Monitoring Collector Scripts    @
+    @      Copyright  : Ngakan Nyoman Gandhi            @
+    @      Start Date : ${START}                        @
+    @      END DATE   : ${END}                          @
+    @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+    Send inquiries to <ngakan.gandhi@packet-systems.com>
 EOF
 
 # Call the csv gatherer scripts
