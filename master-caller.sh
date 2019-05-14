@@ -146,6 +146,16 @@ fi
 START=${start_year}-${start_month}-${start_month_last_date} 
 END=${end_year}-${end_month}-${end_month_last_date}
 
+# Print fancy banner
+cat << EOF
+    @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+    @ EPC Capacity Monitoring Collector Scripts @
+    @    Copyright  : Ngakan Nyoman Gandhi      @
+    @    Start Date : ${START}                  @
+    @    END DATE   : ${END}                    @
+    @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+EOF
+
 # Call the csv gatherer scripts
 printf "Running SGSN data gatherer...start date: %s, end date: %s \n" ${START} ${END} ; call_sgsn
 printf "Running GGSN data gatherer...start date: %s, end date: %s \n" ${START} ${END} ; call_ggsn
