@@ -70,24 +70,22 @@ def WriteGGSNPDPSession(csv_list, output_xls_filename, node_json):
             df['Sum'] = df.sum(axis=1, skipna=True)
             # Create a container of summarized data for : daily, monthly
             daily_summary = pd.DataFrame()
+            weekly_summary = pd.DataFrame()
             monthly_summary = pd.DataFrame()
             # Create a new DataFrame = daily_summary, weekly_summary, monthly_summary
-            daily_summary['Max Session Per Day'] = df['Sum'].resample('D').max()
-            monthly_summary['Max Session Per Month'] = df['Sum'].resample('M').max()
-            # Get the value of monthly summarized data
-            max_month = df['Sum'].resample('M').max().values[0]
-            # Locate date where the max session per day match the maximum session per month
-            session_summary = daily_summary[daily_summary['Max Session Per Day'] == max_month]
-            # Append node name to session summary
-            session_summary['Node'] = d['NodeName']
+            daily_summary['Session'] = df['Sum'].resample('D').max()
+            weekly_summary['Session'] = daily_summary['Session'].resample('W').max()
+            monthly_summary = weekly_summary.aggregate({"Session": ['mean']}, sort=True)
+            # Add column consisting of NodeName
+            monthly_summary['Node'] = d['NodeName']
             # Append to node summary dataframe
-            node_pdp_session_summary = node_pdp_session_summary.append(session_summary)
+            node_pdp_session_summary = node_pdp_session_summary.append(monthly_summary)
         # Create a row containing total session per month
         node_pdp_session_summary = node_pdp_session_summary.append(node_pdp_session_summary.aggregate({"Max Session Per Day": ['sum']}), sort=True)
         # Fill NaN cell with blank
         node_pdp_session_summary = node_pdp_session_summary.fillna('')
         # Write to excel
-        node_pdp_session_summary.to_excel(writer, sheet_name='TotalSession', index_label='Date of Max Session')
+        node_pdp_session_summary.to_excel(writer, sheet_name='TotalSession', index_label='Remark')
     writer.save()
 
 # ConcatSAU is a function to concat dictionary of dataframes with the same key
