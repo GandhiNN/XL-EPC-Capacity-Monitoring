@@ -162,8 +162,14 @@ else
     end_month_last_date=${calendar[${end_month_string}]}   
 fi
 
-START=${start_year}-${start_month}-${start_month_last_date} 
-END=${end_year}-${end_month}-${end_month_last_date}
+# Logic to check start and end date
+if [[-z $START] && [-z $END]]
+then
+    START=${start_year}-${start_month}-${start_month_last_date} 
+    END=${end_year}-${end_month}-${end_month_last_date}
+else
+    echo "Using Start Date=$START, and End Date=$END"
+fi
 
 # Print fancy banner
 cat << EOF
