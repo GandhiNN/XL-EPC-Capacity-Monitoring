@@ -30,6 +30,7 @@ arg=$1
 case $arg in
   -h|--help)
     display_usage
+    exit 0
     ;;
   -t|--timerange)
     START=$2
