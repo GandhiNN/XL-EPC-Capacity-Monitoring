@@ -45,6 +45,7 @@ def WriteGGSNPDPSession(csv_list, output_xls_filename, node_json):
         data = json.load(json_file)
     # Start logging and load raw file into dataframe
     with pd.ExcelWriter(output_xls_filename) as writer:
+        node_pdp_session_summary = pd.DataFrame()
         for d in data:
             logging.info("processing for %s, node = '%s'", output_xls_filename, d['NodeName'])
             epc_node_csv = "".join([s for s in csv_list if d['NodeName'] in s])
