@@ -83,7 +83,7 @@ def WriteGGSNPDPSession(csv_list, output_xls_filename, node_json):
             # Append to node summary dataframe
             node_pdp_session_summary = node_pdp_session_summary.append(session_summary)
         # Create a row containing total session per month
-        node_pdp_session_summary = node_pdp_session_summary.append(node_pdp_session_summary.aggregate({"Max Session Per Day": ['sum']}))
+        node_pdp_session_summary = node_pdp_session_summary.append(node_pdp_session_summary.aggregate({"Max Session Per Day": ['sum']}), sort=True)
         # Fill NaN cell with blank
         node_pdp_session_summary = node_pdp_session_summary.fillna('')
         # Write to excel
