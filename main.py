@@ -90,7 +90,8 @@ def main():
         elif "IP Pool" in k:
             WriteIPPool(v, k, saegw_json) 
         elif "PDP Session" in k:
-            WriteGGSNActSession(v, k, saegw_json)
+            #WriteGGSNActSession(v, k, saegw_json)
+            WriteGGSNPDPSession(v, k, saegw_json)
     # SGSNMME
     for k, v in output_filename_sgsn.items():
         if "SAU" in k:
