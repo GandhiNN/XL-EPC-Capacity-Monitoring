@@ -163,7 +163,7 @@ else
 fi
 
 # Logic to check start and end date
-if [[-z $START] && [-z $END]]
+if [ -z $START ] && [ -z $END ]
 then
     START=${start_year}-${start_month}-${start_month_last_date} 
     END=${end_year}-${end_month}-${end_month_last_date}
