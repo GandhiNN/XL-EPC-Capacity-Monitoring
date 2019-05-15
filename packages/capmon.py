@@ -38,6 +38,57 @@ def WriteGGSNActSession(resource_list_name, output_filename, node_json):
             logging.info("writing dataframe to excel sheet, sheet name='%s'", d['NodeName'])
             df.to_excel(writer, sheet_name=d['NodeName'])
 
+# WriteGGSNPDPSession accepts a list of session csv files, output filename, and node name
+def WriteGGSNPDPSession(csv_list, output_xls_filename, node_json):
+    # Load JSON file
+    with open(node_json) as json_file:
+        data = json.load(json_file)
+    # Start logging and load raw file into dataframe
+    with pd.ExcelWriter(output_xls_filename) as writer:
+        for d in data:
+            logging.info("processing for %s, node = '%s'", output_xls_filename, d['NodeName'])
+            epc_node_csv = "".join([s for s in csv_list if d['NodeName'] in s])
+            cols = ['Timestamp', 'APN Name', 'APN Total Active Bearers']
+            apns = ['axis','axismms','blackberry.net','internet',
+                    'www.xlgprs.net','www.xlmms.net','xlunlimited']
+            df = pd.read_csv(epc_node_csv)
+            # Select only relatable columns
+            df = df[cols]
+            # Format the timestamp
+            df['Timestamp'] = pd.to_datetime(df['Timestamp'], format='%Y-%m-%dT%H:%M+0700')
+            # Set 'Timestamp' as index
+            df.set_index('Timestamp', inplace=True)
+            # Select only rows whose column values matching APN list
+            df = df[df['APN Name'].isin(apns)]
+            # Convert columns APN Total Active Bearers to integer
+            df['APN Total Active Bearers'] = df['APN Total Active Bearers'].str.replace(',','').astype(float).astype(int)
+            # Group the dataframe and unstack to multiindex dataframe
+            df = df.groupby(['Timestamp','APN Name']).sum().unstack()
+            # Sum values for each records
+            # i.e. Find the sum along the column axis, assign as new column to DF ('Sum')
+            df['Sum'] = df.sum(axis=1, skipna=True)
+            # Create a container of summarized data for : daily, monthly
+            daily_summary = pd.DataFrame()
+            monthly_summary = pd.DataFrame()
+            # Create a new DataFrame = daily_summary, weekly_summary, monthly_summary
+            daily_summary['Max Session Per Day'] = df['Sum'].resample('D').max()
+            monthly_summary['Max Session Per Month'] = df['Sum'].resample('M').max()
+            # Get the value of monthly summarized data
+            max_month = df['Sum'].resample('M').max().values[0]
+            # Locate date where the max session per day match the maximum session per month
+            session_summary = daily_summary[daily_summary['Max Session Per Day'] == max_month]
+            # Append node name to session summary
+            session_summary['Node'] = d['NodeName']
+            # Append to node summary dataframe
+            node_pdp_session_summary = node_pdp_session_summary.append(session_summary)
+        # Create a row containing total session per month
+        node_pdp_session_summary = node_pdp_session_summary.append(node_pdp_session_summary.aggregate({"Max Session Per Day": ['sum']}))
+        # Fill NaN cell with blank
+        node_pdp_session_summary = node_pdp_session_summary.fillna('')
+        # Write to excel
+        node_pdp_session_summary.to_excel(writer, sheet_name='Total Session all vGGSN per Month', index_label='Date of Max Session')
+    writer.save()
+
 # ConcatSAU is a function to concat dictionary of dataframes with the same key
 def WriteSAUAllRAT(df1, df2, output_name):
     logging.info("concatenating dataframes...")
