@@ -15,6 +15,31 @@ SCRIPT=${HOME}/epc-capacity-monitoring/main
 WORKDIR=${HOME}/epc-capacity-monitoring
 CONFDIR=${HOME}/epc-capacity-monitoring/configs
 
+# Optional show script instructions
+function display_usage() {
+    echo
+    echo "Usage: $0"
+    echo
+    echo " -h, --help   Display usage instructions"
+    echo " -t, --timerange <start_date> <end_date> Set custom time interval for data collection (Optional)"
+    echo
+}
+
+# Handle if we want to use non-default time range
+arg=$1
+case $arg in
+  -h|--help)
+    display_usage
+    ;;
+  -t|--timerange)
+    START=$2
+    END=$3
+    ;;
+   *)
+    echo "Not using custom arguments, continuing..."
+    ;;
+esac
+
 # Set global vars : Post-processing script, directory ; Destination directory
 DATA_NEATER=${HOME}/epc-capacity-monitoring/main.py
 POST_PROC_DIR=${HOME}/epc-capacity-monitoring/processed
