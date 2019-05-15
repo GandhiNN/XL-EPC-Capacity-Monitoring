@@ -87,7 +87,7 @@ def WriteGGSNPDPSession(csv_list, output_xls_filename, node_json):
         # Fill NaN cell with blank
         node_pdp_session_summary = node_pdp_session_summary.fillna('')
         # Write to excel
-        node_pdp_session_summary.to_excel(writer, sheet_name='Total Session all vGGSN per Month', index_label='Date of Max Session')
+        node_pdp_session_summary.to_excel(writer, sheet_name='TotalSession', index_label='Date of Max Session')
     writer.save()
 
 # ConcatSAU is a function to concat dictionary of dataframes with the same key
