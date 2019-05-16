@@ -11,33 +11,6 @@ import numpy as np
 import pandas as pd
 import subprocess
 
-# WriteGGSNActSession accepts a writer object, the raw csv file data, and the node name
-def WriteGGSNActSession(resource_list_name, output_filename, node_json):
-    # Load JSON file
-    with open(node_json) as json_file:
-        data = json.load(json_file)
-    # Start logging and load raw file into dataframe
-    with pd.ExcelWriter(output_filename) as writer:
-        for d in data:
-            logging.info("processing for %s, node = '%s'", output_filename, d['NodeName'])
-            epc_node_csv = "".join([s for s in resource_list_name if d['NodeName'] in s])
-            cols = ['APN Name', 'APN Total Active Bearers']
-            apns = ['axis','axismms','blackberry.net','internet','www.xlgprs.net','www.xlmms.net','xlunlimited']
-            df = pd.read_csv(epc_node_csv, index_col='Timestamp')
-            # Select only relatable columns
-            df = df[cols]
-            # Select only rows whose column values matching apn list `apns`
-            df = df[df['APN Name'].isin(apns)]
-            # Convert columns:APN Total Active Bearers to float
-            df['APN Total Active Bearers'] = df['APN Total Active Bearers'].str.replace(',','').astype(float)
-            # Check for null values
-            df = IsNull(df)
-            # Group the dataframe and unstack to multiindex dataframe
-            df = df.groupby(['Timestamp','APN Name']).sum().unstack()
-            df.columns.set_levels(['APN Name'],level=0,inplace=True)
-            logging.info("writing dataframe to excel sheet, sheet name='%s'", d['NodeName'])
-            df.to_excel(writer, sheet_name=d['NodeName'])
-
 # WriteGGSNPDPSession accepts a list of session csv files, output filename, and node name
 def WriteGGSNPDPSession(csv_list, output_xls_filename, node_json):
     # Load JSON file
