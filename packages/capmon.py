@@ -85,15 +85,13 @@ def WriteGGSNPDPSession(csv_list, output_xls_filename, node_json):
             # Create a temp DF for max session per day : get the dateindex
             tmp_df = daily_summary[daily_summary['Session Average'] == max_month_pdp_session]
             monthly_summary['Date of Highest PDP Session'] = tmp_df.index.values
-            # Set the nodename as index
-            monthly_summary.set_index(['Node'])
             # Append to node summary dataframe
             node_pdp_session_summary = node_pdp_session_summary.append(monthly_summary)
         # Create a row containing total session per month
         node_pdp_session_summary = node_pdp_session_summary.append(node_pdp_session_summary.aggregate({"Session Average": ['sum'], 
                                                                             "Highest PDP Session in a Month": ['sum']}), sort=True)
-        # Set the nodename as index
-        node_pdp_session_summary.set_index(['Node'])
+        # Set the nodename as index inplace
+        node_pdp_session_summary.set_index(['Node'], inplace=True)
         # Fill NaN cell with blank
         node_pdp_session_summary = node_pdp_session_summary.fillna('')
         # Write to excel
