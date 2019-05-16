@@ -73,11 +73,20 @@ def WriteGGSNPDPSession(csv_list, output_xls_filename, node_json):
             weekly_summary = pd.DataFrame()
             monthly_summary = pd.DataFrame()
             # Create a new DataFrame = daily_summary, weekly_summary, monthly_summary
-            daily_summary['Session'] = df['Sum'].resample('D').max()
-            weekly_summary['Session'] = daily_summary['Session'].resample('W').max()
-            monthly_summary = weekly_summary.aggregate({"Session": ['mean']}, sort=True)
+            daily_summary['Session Average'] = df['Sum'].resample('D').max()
+            weekly_summary['Session Average'] = daily_summary['Session Average'].resample('W').max()
+            monthly_summary = weekly_summary.aggregate({"Session Average": ['mean']}, sort=True)
             # Add column consisting of NodeName
             monthly_summary['Node'] = d['NodeName']
+            # Check which date produces the highest PDP session
+            max_month_pdp_session = daily_summary['Session Average'].resample('M').max().values[0]
+            # Create a new column: 'Date of Highest PDP Session'
+            monthly_summary['Highest PDP Session in a Month'] = max_month_pdp_session
+            # Create a temp DF for max session per day : get the dateindex
+            tmp_df = daily_summary[daily_summary['Session Average'] == max_month_pdp_session]
+            monthly_summary['Date of Highest PDP Session'] = tmp_df.index.values
+            # Set the nodename as index
+            monthly_summary.set_index(['Node'])
             # Append to node summary dataframe
             node_pdp_session_summary = node_pdp_session_summary.append(monthly_summary)
         # Create a row containing total session per month
