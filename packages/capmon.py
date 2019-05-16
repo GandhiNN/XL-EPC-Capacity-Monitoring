@@ -90,11 +90,14 @@ def WriteGGSNPDPSession(csv_list, output_xls_filename, node_json):
             # Append to node summary dataframe
             node_pdp_session_summary = node_pdp_session_summary.append(monthly_summary)
         # Create a row containing total session per month
-        node_pdp_session_summary = node_pdp_session_summary.append(node_pdp_session_summary.aggregate({"Session Average": ['sum']}), sort=True)
+        node_pdp_session_summary = node_pdp_session_summary.append(node_pdp_session_summary.aggregate({"Session Average": ['sum'], 
+                                                                            "Highest PDP Session in a Month": ['sum']}), sort=True)
+        # Set the nodename as index
+        node_pdp_session_summary.set_index(['Node'])
         # Fill NaN cell with blank
         node_pdp_session_summary = node_pdp_session_summary.fillna('')
         # Write to excel
-        node_pdp_session_summary.to_excel(writer, sheet_name='TotalSession', index_label='Remark')
+        node_pdp_session_summary.to_excel(writer, sheet_name='TotalSession', index_label='Node')
     writer.save()
 
 # ConcatSAU is a function to concat dictionary of dataframes with the same key
