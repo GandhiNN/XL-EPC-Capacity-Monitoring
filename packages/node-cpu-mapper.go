@@ -101,8 +101,8 @@ func sliceAtoi(sa string) ([]int, error) {
 	si := make([]int, 0, len(sa))
 	for _, a := range saSlice {
 		i, err := strconv.Atoi(a)
-		if err != nil {
-			return si, err
+		if err != nil { // when parsed csv returns an empty field
+            continue // skip append
 		}
 		si = append(si, i)
 	}
