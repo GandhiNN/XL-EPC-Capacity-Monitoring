@@ -191,6 +191,26 @@ else
     echo "Destination directory exists at ${DEST_DIR}"
 fi
 
+## TODO
+# Check for Ansible Flag
+ansibleFlag=1
+ansibleDir='/Users/Gandhi/Documents/GitHub/staros-ansible-playbook/get_card_status/'
+
+function ansible_call() {
+    script_dir=$(pwd)
+    cd ${ansibleDir}
+    echo "executing ansible-playbook..." ; ansible-playbook play.yml
+    cd ${script_dir}
+}
+
+# Call ansible playbook to gather card data
+if [ ${ansibleFlag} == "1" ]; then
+    echo "Executing ansible playbook..." ; ansible_call
+else
+    echo "Skipping ansible playbook execution..."
+fi
+## END: TODO
+
 # Call the csv gatherer scripts
 printf "Running SGSN data gatherer...start date: %s, end date: %s \n" ${START} ${END} ; call_sgsn
 printf "Running GGSN data gatherer...start date: %s, end date: %s \n" ${START} ${END} ; call_ggsn
