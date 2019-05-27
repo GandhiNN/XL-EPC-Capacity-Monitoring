@@ -15,37 +15,40 @@ SCRIPT=${HOME}/epc-capacity-monitoring/main
 WORKDIR=${HOME}/epc-capacity-monitoring
 CONFDIR=${HOME}/epc-capacity-monitoring/configs
 
-# Optional show script instructions
-function display_usage() {
-    echo
-    echo "Usage: $0"
-    echo
-    echo " -h, --help   Display usage instructions"
-    echo " -t, --timerange <start_date> <end_date> Set custom time interval for data collection (Optional)"
-    echo
-}
-
-# Handle if we want to use non-default time range
-arg=$1
-case $arg in
-  -h|--help)
-    display_usage
-    exit 0
-    ;;
-  -t|--timerange)
-    START=$2
-    END=$3
-    ;;
-   *)
-    echo "Not using custom arguments, continuing..."
-    ;;
-esac
-
 # Set global vars : Post-processing script, directory ; Destination directory
 DATA_NEATER=${HOME}/epc-capacity-monitoring/main.py
 POST_PROC_DIR=${HOME}/epc-capacity-monitoring/processed
 DEST_DIR=${POST_PROC_DIR}/${year}/${last_month}
 
+# Optional show script instructions
+function display_usage() {
+    echo
+    echo "script usage: $(basename $0) [-s] <start_time> [-e] <end_time> [-a] <True|False>" >&2
+}
+
+# Handle if we want to use non-default time range
+while getopts "s:e:a:" OPTION; do
+    case "$OPTION" in
+        s)
+            START="$OPTARG"
+            ;;
+        e)
+            END="$OPTARG"
+            ;;
+        a)
+            flag="$OPTARG"
+            if [ $flag == "True" ]; then
+                ANSIBLEFLAG=1
+            fi
+            ;;
+        ?)
+            display_usage
+            exit 1
+            ;;
+    esac
+done
+
+# Function defs
 function call_sgsn() {
     # Script start timing
     start=$(date +%s)
@@ -191,25 +194,22 @@ else
     echo "Destination directory exists at ${DEST_DIR}"
 fi
 
-## TODO
-# Check for Ansible Flag
-ansibleFlag=1
-ansibleDir='/Users/Gandhi/Documents/GitHub/staros-ansible-playbook/get_card_status/'
-
+# Ansible Logic to gather card stats 
 function ansible_call() {
     script_dir=$(pwd)
+    ansibleDir='/Users/Gandhi/Documents/GitHub/staros-ansible-playbook/get_card_status/'
     cd ${ansibleDir}
-    echo "executing ansible-playbook..." ; ansible-playbook play.yml
+    echo "executing ansible-playbook...for SAEGW" ; ansible-playbook play.yml --extra-vars "hostgroup=saegw"
+    echo "executing ansible-playbook...for SGSNMME" ; ansible-playbook play.yml --extra-vars "hostgroup=sgsnmme"
     cd ${script_dir}
 }
 
 # Call ansible playbook to gather card data
-if [ ${ansibleFlag} == "1" ]; then
+if [ ${ANSIBLEFLAG} == "1" ]; then
     echo "Executing ansible playbook..." ; ansible_call
 else
     echo "Skipping ansible playbook execution..."
 fi
-## END: TODO
 
 # Call the csv gatherer scripts
 printf "Running SGSN data gatherer...start date: %s, end date: %s \n" ${START} ${END} ; call_sgsn
