@@ -2,6 +2,7 @@
 
 # Import modules
 from packages.capmon import *
+import sys
 
 # SetVar is global setter for variables to be used in main
 def SetVariables():
@@ -55,7 +56,7 @@ def CreateDictOfFilenames(cwd, today):
     }
     return output_filename_ggsn, output_filename_sgsn
 
-def main():
+def main(cpu_discard_switch):
     # Set logger
     SetLogging()
 
@@ -99,10 +100,11 @@ def main():
             elif "4G-SAU" in k:
                 df_4g_sau = LoadDF4GSau(v, sgsn_list, k)
         elif "SGSN CPU" in k:
-            WriteNodeCPU(v, k, sgsnmme_json)
-
+            WriteNodeCPU(v, k, sgsnmme_json, cpu_discard_switch)
+            
     # Concatenate the SAU dataframes 
     WriteSAUAllRAT(df_4g_sau, df_2g3g_sau, SGSN_TOTAL_SAU_XLS)
 
 if __name__ == "__main__":
+    #main(sys.argv[1])
     main()
