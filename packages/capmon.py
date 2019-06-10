@@ -109,7 +109,7 @@ def WriteGGSNTput(resource_list_name, output_filename):
 
 # WriteNodeCPU is a function to write consolidated CPU load
 # to a spreadsheet sans CF cards, Demux, and standby SF cards
-def WriteNodeCPU(resource_list_name, output_filename, node_json):
+def WriteNodeCPU(resource_list_name, output_filename, node_json, cpu_discard_switch):
     # Load JSON file
     with open(node_json) as json_file:
         data = json.load(json_file)
@@ -127,11 +127,10 @@ def WriteNodeCPU(resource_list_name, output_filename, node_json):
             df = df.unstack()
             # Drop uppermost column level
             df.columns = df.columns.droplevel()
-            # Select non-traffic serving cards to be excluded
-            card_id_non_sf_active = d['CF'] + d['SFStandby'] + d['Demux']
-            logging.info("dropping the following card with id: %s", str(card_id_non_sf_active).strip('[]'))
-            # Drop the columns with card id = card_id_non_sf_active
-            df_clean = df.drop(card_id_non_sf_active, axis=1)
+            if cpu_discard_switch == True:
+                card_id_non_sf_active = d['CF'] + d['SFStandby'] + d['Demux']
+                logging.info("dropping the following card with id: %s", str(card_id_non_sf_active).strip('[]'))
+                df_clean = df.drop(card_id_non_sf_active, axis=1)
             # Restack the dataframe (stack() returns a Series),
             # Reconvert to Dataframe, and rename the columns
             logging.info("reshaping the data to proper tabular format...")
