@@ -106,5 +106,4 @@ def main(cpu_discard_switch):
     WriteSAUAllRAT(df_4g_sau, df_2g3g_sau, SGSN_TOTAL_SAU_XLS)
 
 if __name__ == "__main__":
-    #main(sys.argv[1])
-    main()
+    main(sys.argv[1])
