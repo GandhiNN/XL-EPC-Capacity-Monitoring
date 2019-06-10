@@ -28,7 +28,7 @@ function display_usage() {
 }
 
 # Handle if we want to use non-default time range
-while getopts "s:e:a:" OPTION; do
+while getopts "s:e:a:c:" OPTION; do
     case "$OPTION" in
         s)
             START="$OPTARG"
