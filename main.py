@@ -87,7 +87,7 @@ def main(cpu_discard_switch):
         if "Throughput" in k:
             WriteGGSNTput(v, k)
         elif "GGSN CPU" in k:
-            WriteNodeCPU(v, k, saegw_json)
+            WriteNodeCPU(v, k, saegw_json, cpu_discard_switch)
         elif "IP Pool" in k:
             WriteIPPool(v, k, saegw_json) 
         elif "PDP Session" in k:
