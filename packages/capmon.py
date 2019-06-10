@@ -130,15 +130,15 @@ def WriteNodeCPU(resource_list_name, output_filename, node_json, cpu_discard_swi
             if cpu_discard_switch == True:
                 card_id_non_sf_active = d['CF'] + d['SFStandby'] + d['Demux']
                 logging.info("dropping the following card with id: %s", str(card_id_non_sf_active).strip('[]'))
-                df_clean = df.drop(card_id_non_sf_active, axis=1)
+                df = df.drop(card_id_non_sf_active, axis=1)
             # Restack the dataframe (stack() returns a Series),
             # Reconvert to Dataframe, and rename the columns
             logging.info("reshaping the data to proper tabular format...")
-            df_clean = df_clean.stack().to_frame().reset_index()
-            df_clean.columns = ['Timestamp','Card ID','CPU Load Busy Percentage Last 5 Minutes Average']
+            df = df.stack().to_frame().reset_index()
+            df.columns = ['Timestamp','Card ID','CPU Load Busy Percentage Last 5 Minutes Average']
             # Log for cleaned data : end result
             logging.info("writing dataframe to excel sheet, sheet name='%s'", d['NodeName'])
-            df_clean.to_excel(writer, sheet_name=d['NodeName'], index=False)
+            df.to_excel(writer, sheet_name=d['NodeName'], index=False)
         writer.save()
 
 # WriteIPPool is a function to write consolidated
