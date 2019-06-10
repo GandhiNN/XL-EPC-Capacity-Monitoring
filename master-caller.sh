@@ -44,7 +44,7 @@ while getopts "s:e:a:c:" OPTION; do
             ;;
         c)
             flag="$OPTARG"
-            if [ $flag == "True"]; then
+            if [ $flag == "True" ]; then
                 FLAG_BOOL=$flag
             fi
             ;;
