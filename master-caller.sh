@@ -223,7 +223,7 @@ printf "Running SGSN data gatherer...start date: %s, end date: %s \n" ${START} $
 printf "Running GGSN data gatherer...start date: %s, end date: %s \n" ${START} ${END} ; call_ggsn
 
 # Call the data neater scripts
-echo "Running data neater script..." ; $DATA_NEATER ${FLAG_BOOL}
+echo "Running data neater script...${FLAG_BOOL}" ; $DATA_NEATER ${FLAG_BOOL}
 
 ## Final cleanups
 # 1. Moving the processed file into destination directory
