@@ -23,7 +23,8 @@ DEST_DIR=${POST_PROC_DIR}/${year}/${last_month}
 # Optional show script instructions
 function display_usage() {
     echo
-    echo "script usage: $(basename $0) [-s] <start_time> [-e] <end_time> [-a] <True|False>" >&2
+    echo "script usage: $(basename $0) [-s] <start_time> [-e] <end_time> [-a] <True|False> [-c] <True|False>"
+    echo 
 }
 
 # Handle if we want to use non-default time range
@@ -39,6 +40,12 @@ while getopts "s:e:a:" OPTION; do
             flag="$OPTARG"
             if [ $flag == "True" ]; then
                 ANSIBLEFLAG=1
+            fi
+            ;;
+        c)
+            flag="$OPTARG"
+            if [ $flag == "True"]; then
+                FLAG_BOOL=$flag
             fi
             ;;
         ?)
@@ -216,7 +223,7 @@ printf "Running SGSN data gatherer...start date: %s, end date: %s \n" ${START} $
 printf "Running GGSN data gatherer...start date: %s, end date: %s \n" ${START} ${END} ; call_ggsn
 
 # Call the data neater scripts
-echo "Running data neater script..." ; $DATA_NEATER
+echo "Running data neater script..." ; $DATA_NEATER ${FLAG_BOOL}
 
 ## Final cleanups
 # 1. Moving the processed file into destination directory
