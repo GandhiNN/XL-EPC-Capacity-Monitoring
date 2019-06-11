@@ -1,0 +1,53 @@
+---
+- name: Gathering local facts
+  hosts: localhost
+  gather_facts: yes
+  tasks:
+    - name: GET LOCAL EPOCH
+      shell: date +%s
+      register: dateEpoch
+
+    - name: Set Local Epoch as Fact
+      set_fact:
+        localEpoch: "{{ dateEpoch.stdout }}"
+
+    - debug:
+        msg: "Local Time is : {{ localEpoch }}"
+
+- name: Clean Artifacts on Local
+  hosts: localhost
+  gather_facts: yes
+  tasks:
+    - name: Removing Artifact Card Logs
+      file:
+        path: "{{ item }}"
+        state: absent
+      with_fileglob: 
+        - "{{ playbook_dir }}/tmp/*"
+
+- name: Executing Cisco StarOS Get Card Roles
+  hosts: "{{ hostgroup }}"
+  gather_facts: no
+  roles:
+    - cards
+
+- name: Execute card log parser
+  hosts: localhost
+  gather_facts: yes
+  tasks:
+    - name: Execute parser script
+      script: "{{ playbook_dir }}/script/card_log_parser.py"
+      
+- name: Finalizing Card File Name
+  hosts: localhost
+  gather_facts: yes
+  vars:
+    hostgroup: "{{ hostgroup }}"
+  tasks:
+    - name: Modify card file name according to hostgroup supplied
+      command: mv "{{ playbook_dir }}"/output/card.csv "{{ playbook_dir }}"/output/ggsn-card-role.csv
+      when: hostgroup == "ggsn"
+
+    - name: Modify card file name according to hostgroup supplied
+      command: mv "{{ playbook_dir }}"/output/card.csv "{{ playbook_dir }}"/output/sgsnmme-card-role.csv
+      when: hostgroup == "sgsnmme"

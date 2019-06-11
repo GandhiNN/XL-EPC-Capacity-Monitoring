@@ -1,0 +1,58 @@
+[sgsnmme]
+VSGBTR05 ansible_host=10.205.57.4
+VSGBTR06 ansible_host=10.205.87.4
+VSGCBT04 ansible_host=10.205.62.4
+VSGCBT05 ansible_host=10.205.67.4
+
+[ggsn]
+GGCBT11 ansible_host=10.195.109.4
+GGCBT12 ansible_host=10.195.109.132
+GGCBT13 ansible_host=10.195.120.4
+GGCBT14 ansible_host=10.195.126.4
+GGCBT15 ansible_host=10.195.129.4
+GGCBT16 ansible_host=10.195.132.4
+GGCBT17 ansible_host=10.195.136.4
+GGCBT18 ansible_host=10.195.139.4
+GGBNB01 ansible_host=10.196.234.4
+GGBNB02 ansible_host=10.196.237.4
+
+[pocbjm]
+vGGBJM01 ansible_host=10.212.211.4 ansible_ssh_user=admin ansible_ssh_pass=Admin@123
+
+[production:children]
+sgsnmme
+ggsn
+
+[sgsnmme:vars]
+ansible_ssh_user=psiuser
+ansible_ssh_pass=PsiPscorEs!2345
+
+[ggsn:vars]
+ansible_ssh_user=psiuser
+ansible_ssh_pass=PsiPscoreGg5n!23
+
+[testbed]
+SGSNMMEPOC1 ansible_host=10.205.37.4 ansible_ssh_user=admin ansible_ssh_pass=Psi12345!
+
+[prime-prod]
+CBTCNB03-VPCentral ansible_host=10.23.33.124
+CBTCNB03-VPCentralFM ansible_host=10.23.33.128
+CBTCNB03-VPNetwork ansible_host=10.23.33.129
+CBTCNB03-VPNetUnit1 ansible_host=10.23.33.133
+CBTCNB03-VPNetUnit2 ansible_host=10.23.33.134
+CBTCNB03-VPPM ansible_host=10.23.33.132
+CBTCNB03-VPPMUnit ansible_host=10.23.33.125
+CBTCNB03-VPPMUnit2 ansible_host=10.23.33.139
+
+[prime-prod:vars]
+ansible_ssh_user=root
+ansible_ssh_pass=PsiOS2018!321
+
+[tracing-server]
+TS-BTR01 ansible_host=10.172.15.66
+TS-CBT01 ansible_host=10.172.97.234
+TS-CBT02 ansible_host=10.172.15.98
+
+[tracing-server:vars]
+ansible_ssh_user=root
+ansible_ssh_pass=P@ssw0rd!234

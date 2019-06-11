@@ -1,0 +1,113 @@
+---
+- gather_facts: no
+  tasks:
+    - block:
+    # GENERAL Health Check Sequences
+      - name: HEALTHCHECK => "show clock"
+        raw: show clock
+        register: clock_res
+
+      - name: HEALTHCHECK => "show version"
+        raw: show version
+        register: version_res
+
+      - name: HEALTHCHECK => "show boot"
+        raw: show boot
+        register: boot_res
+
+      - name: HEALTHCHECK => "show license information full"
+        raw: show license information full
+        register: lic_info_res
+
+      - name: HEALTHCHECK => "show hd raid verbose"
+        raw: show hd raid verbose
+        register: hd_raid_res
+
+      - name: HEALTHCHECK => "show card table"
+        raw: show card table
+        register: card_table_res
+
+      - name: HEALTHCHECK => "show cpu table"
+        raw: show cpu table
+        register: cpu_table_res
+
+      - name: HEALTHCHECK => "show port table"
+        raw: show port table
+        register: port_table_res
+
+      - name: HEALTHCHECK => "show alarm outstanding all"
+        raw: show alarm outstanding all
+        register: alarm_all_res
+
+      - name: HEALTHCHECK => "show service all"
+        raw: show service all
+        register: service_res
+
+      - name: HEALTHCHECK => "show diameter peers full all"
+        raw: show diameter peers full all
+        register: diam_peer_res
+
+      - name: HEALTHCHECK => "show subs data-rate"
+        raw: show subs data-rate
+        register: subs_data_rate_res
+
+      - name: HEALTHCHECK => "show session disconnect-reason"
+        raw: show session disconnect-reason
+        register: sess_disc_res
+
+      - name: HEALTHCHECK => "show configuration errors"
+        raw: show configuration errors
+        register: config_err_res
+      ignore_errors: True
+
+  # Print Health Check Results
+    - block:
+      - name: RESULTS => Current CLOCK
+        debug: var=clock_res.stdout_lines
+
+      - name: RESULTS => STAROS Version
+        debug: var=ver_res.stdout_lines
+
+      - name: RESULTS => BOOT PRIORITY TABLE
+        debug: var=boot_res.stdout_lines
+
+      - name: RESULTS => LICENSE INFORMATION
+        debug: var=lic_info_res.stdout_lines
+
+      - name: RESULTS => HD RAID STATUS
+        debug: var=hd_raid_res.stdout_lines
+
+      - name: RESULTS => CARD TABLE Status
+        debug: var=card_tab_res.stdout_lines
+
+      - name: RESULTS => CPU TABLE Status
+        debug: var=cpu_tab_res.stdout_lines
+
+      - name: RESULTS => PORT TABLE Status
+        debug: var=port_table_res.stdout_lines
+
+      - name: RESULTS => ALL OUTSTANDING ALARMS
+        debug: var=alarm_all_res.stdout_lines
+
+      - name: RESULTS => SERVICES STATUS
+        debug: var=service_res.stdout_lines
+
+      - name: RESULTS => DIAMETER PEER Status
+        debug: var=diam_peer_res.stdout_lines
+
+      - name: RESULTS => SUBSCRIBER DATA RATE
+        debug: var=subs_data_rate_res.stdout_lines
+
+      - name: RESULTS => SESSION DISCONNECT REASON
+        debug: var=sess_disc_res.stdout_lines
+
+      - name: RESULTS => CONFIGURATION ERRORS
+        debug: var=config_err_res.stdout_lines
+
+  # Write HC results to file
+    - block:
+      - name: Write HC Results to File
+        local_action: copy content="{{ vars[item] | to_nice_json }}" dest="/Users/Gandhi/ansible_playbook/output/{{ inventory_hostname }}-HC-${dateepoch}.log"
+        with_items:
+          - config_err_res
+          - sess_disc_res

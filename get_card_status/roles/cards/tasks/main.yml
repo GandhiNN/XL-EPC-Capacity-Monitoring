@@ -1,0 +1,27 @@
+---
+# Staros Services-Related Health Check Sequences
+- name: Get Active-Standby Card Status
+  raw: show card table
+  register: card_table
+  ignore_errors: True
+
+- name: Get Demux Card
+  raw: show session recovery status verbose
+  register: session_recovery
+  ignore_errors: True
+
+- name: Create StarOS Card Log File
+  file:
+    dest: "{{ playbook_dir }}/tmp/{{ inventory_hostname }}-Card-Status.log"
+    state: touch
+  delegate_to: localhost
+
+- name: Write Above Logs to File
+  lineinfile:
+    dest: "{{ playbook_dir }}/tmp/{{ inventory_hostname }}-Card-Status.log"
+    line: "{{ vars[item].stdout_lines | to_nice_json }}"
+    insertafter: EOF
+  with_items:
+    - card_table
+    - session_recovery
+  delegate_to: localhost
