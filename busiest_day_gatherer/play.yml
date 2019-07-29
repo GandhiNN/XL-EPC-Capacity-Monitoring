@@ -1,0 +1,80 @@
+---
+# Example usage
+# ansible-playbook play.yml --extra-vars "month=June year=2019" -v
+- name: Copying ppmunit1 busiest day config towards server
+  hosts: CBTCNB03-VPPMUnit
+  tasks:
+    - copy:
+        src: /Users/Gandhi/Documents/GitHub/capacity-monitoring/busiest_day_gatherer/config/ppmunit1.txt
+        dest: /root/raw_bulkstats/script/config/busiest-day/ppmunit1.txt
+
+- name: Copying ppmunit2 busiest day config towards server
+  hosts: CBTCNB03-VPPMUnit2
+  tasks:
+    - copy:
+        src: /Users/Gandhi/Documents/GitHub/capacity-monitoring/busiest_day_gatherer/config/ppmunit2.txt
+        dest: /root/scripts/config/busiest-day/ppmunit2.txt
+
+- name: Clean last month's busiest day artifacts in PPMUNIT1
+  hosts: CBTCNB03-VPPMUnit
+  gather_facts: yes
+  tasks:
+    - name: List Artifact Bstat Files
+      find:
+        paths: "/opt/CSCOppm-unit/bstat_busiest_day"
+        patterns: "*.tar.gz"
+      register: files_to_delete_ppmunit1
+
+    - name: Remove file globs
+      file:
+        path: "{{ item.path }}"
+        state: absent
+      with_items: "{{ files_to_delete_ppmunit1.files }}"
+
+- name: Clean last month's busiest day artifacts in PPMUNIT2
+  hosts: CBTCNB03-VPPMUnit2
+  gather_facts: yes
+  tasks:
+    - name: List Artifact Bstat Files
+      find:
+        paths: "/opt/CSCOppm-unit/bstat_busiest_day"
+        patterns: "*.tar.gz"
+      register: files_to_delete_ppmunit2
+
+    - name: Remove file globs
+      file:
+        path: "{{ item.path }}"
+        state: absent
+      with_items: "{{ files_to_delete_ppmunit2.files }}"
+
+- name: Execute bulkstat extractor script in ppmunit1
+  hosts: CBTCNB03-VPPMUnit
+  tasks:
+    - name: Execute the script in ppmunit1
+      command: /root/raw_bulkstats/script/busiest_day_extractor.sh 
+
+- name: Execute bulkstat extractor script in ppmunit2
+  hosts: CBTCNB03-VPPMUnit2
+  tasks:
+    - name: Execute the script in ppmunit2
+      command: /root/scripts/busiest_day_extractor.sh
+
+- name: Move extracted bulkstat from ppmunit2 to ppmunit1
+  hosts: CBTCNB03-VPPMUnit
+  tasks:
+    - name: Copy Remote-to-Remote (from ppmunit2 to ppmunit1)
+      synchronize: src=/opt/CSCOppm-unit/bstat_busiest_day/ dest=/opt/CSCOppm-unit/bstat_busiest_day/
+      delegate_to: CBTCNB03-VPPMUnit2
+
+- name: Archive the extracted bulkstat in ppmunit1
+  hosts: CBTCNB03-VPPMUnit
+  vars:
+    month: "{{ month }}"
+    year: "{{ year }}"
+  tasks:
+    - name: Archive the file
+      archive:
+        path: /opt/CSCOppm-unit/bstat_busiest_day/*
+        dest: "/opt/CSCOppm-unit/jordi/Bulkstat{{ month }}{{ year }}.tar.bz2"
+        format: bz2
+
